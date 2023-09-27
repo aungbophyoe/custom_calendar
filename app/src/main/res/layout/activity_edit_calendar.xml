@@ -9,16 +9,7 @@
         android:id="@+id/calendarView"
         app:show_navigation="true"
         app:item_clickable="true"
+        app:is_edit="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/nextButton"
-        android:text="Next"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/calendarView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

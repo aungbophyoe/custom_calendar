@@ -23,5 +23,6 @@
     <declare-styleable name="CustomCalendarView">
         <attr name="show_navigation" format="boolean"/>
         <attr name="item_clickable" format="boolean"/>
+        <attr name="is_edit" format="boolean"/>
     </declare-styleable>
 </resources>

@@ -32,6 +32,7 @@ class CustomCalendarView(context: Context, attrs: AttributeSet) : RelativeLayout
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.CustomCalendarView)
         val isShowNavigation = attributes.getBoolean(R.styleable.CustomCalendarView_show_navigation, false)
         val isItemClickable = attributes.getBoolean(R.styleable.CustomCalendarView_item_clickable, false)
+        val isEdit = attributes.getBoolean(R.styleable.CustomCalendarView_is_edit, false)
         recyclerView = findViewById(R.id.calendarRecyclerView)
         prevButton = findViewById(R.id.prevMonthButton)
         nextButton = findViewById(R.id.nextMonthButton)
@@ -41,20 +42,20 @@ class CustomCalendarView(context: Context, attrs: AttributeSet) : RelativeLayout
             prevButton.visibility = View.GONE
             nextButton.visibility = View.GONE
         }
-        val dataHashMap = hashMapOf<Date,Drawable>()
-        val periodsDay = arrayListOf<String>("7-9-2023","8-9-2023","9-9-2023")
-        val ovulationDay = "17-9-2023"
-        val fertileDays =  arrayListOf<String>("10-9-2023","11-9-2023","12-9-2023","13-9-2023","14-9-2023","15-9-2023","16-9-2023","18-9-2023","19-9-2023","20-9-2023")
+        val dataHashMap = hashMapOf<String,Drawable>()
+        val periodsDay = arrayListOf<String>("07-09-2023","08-09-2023","09-09-2023")
+        val ovulationDay = "17-09-2023"
+        val fertileDays =  arrayListOf<String>("10-09-2023","11-09-2023","12-09-2023","13-09-2023","14-09-2023","15-09-2023","16-09-2023","18-09-2023","19-09-2023","20-09-2023")
         periodsDay.forEach {
-            dataHashMap[parseDate(it)!!] = periodDrawable!!
+            dataHashMap[it] = periodDrawable!!
         }
-        dataHashMap[parseDate(ovulationDay)!!] = ovulationDrawable!!
+        dataHashMap[ovulationDay] = ovulationDrawable!!
         fertileDays.forEach {
-            dataHashMap[parseDate(it)!!] = fertileDrawable!!
+            dataHashMap[it] = fertileDrawable!!
         }
 
         // Set up RecyclerView with your CalendarAdapter
-        calendarAdapter = CalendarAdapter(this,isItemClickable,dataHashMap)
+        calendarAdapter = CalendarAdapter(this,isItemClickable,dataHashMap,isEdit)
         recyclerView.layoutManager = GridLayoutManager(context, 7)
         recyclerView.adapter = calendarAdapter
 
@@ -108,15 +109,14 @@ class CustomCalendarView(context: Context, attrs: AttributeSet) : RelativeLayout
 
         for (dayOfMonth in 1..daysInMonth) {
             val calendar = Calendar.getInstance()
-            calendar.set(Calendar.YEAR, currentYear)
-            calendar.set(Calendar.MONTH, currentMonth)
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             val date = calendar.time
-            // Format the date in the desired format
-            val dateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.ENGLISH)
-            dateFormat.timeZone = TimeZone.getTimeZone("GMT+06:30")
+            // Format the Date object to the "dd-MM-yyyy" format
+            val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
             val formattedDate = dateFormat.format(date)
-            calendarData.add(CalendarDay(dayOfMonth, formattedDate,DayType.CURRENT_MONTH , isToday = (dayOfMonth == currentDay && month == currentMonth && year == currentYear)))
+            calendarData.add(CalendarDay(dayOfMonth, formattedDate ,DayType.CURRENT_MONTH , isToday = (dayOfMonth == currentDay && month == currentMonth && year == currentYear)))
         }
 
         // Calculate the number of days to display from the next month
@@ -130,7 +130,7 @@ class CustomCalendarView(context: Context, attrs: AttributeSet) : RelativeLayout
     }
 
     fun parseDate(dateString: String): Date? {
-        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH)
         return try {
             dateFormat.parse(dateString)
         } catch (e: Exception) {
@@ -139,7 +139,7 @@ class CustomCalendarView(context: Context, attrs: AttributeSet) : RelativeLayout
     }
 
     override fun itemOnClick(calendarDay: CalendarDay) {
-        Toast.makeText(context,"${calendarDay.dayNumber}",Toast.LENGTH_SHORT).show()
+        /*Toast.makeText(context,"${calendarDay.dayNumber}",Toast.LENGTH_SHORT).show()*/
     }
 
 }
