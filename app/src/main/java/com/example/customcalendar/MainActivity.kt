@@ -54,13 +54,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        /*val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         val adapter = MyAdapter()
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(this,2)
-
-        // Submit the data to the adapter
-        adapter.submitList(monthlyDataList)
+        adapter.submitList(monthlyDataList)*/
     }
 
     /*private fun setup() {

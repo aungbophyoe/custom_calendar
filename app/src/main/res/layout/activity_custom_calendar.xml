@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <com.example.customcalendar.CustomCalendar
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.example.customcalendar.CustomCalendarView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/calendarView"
+        app:show_navigation="true"
+        app:item_clickable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
