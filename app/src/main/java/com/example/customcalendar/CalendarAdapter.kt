@@ -1,11 +1,13 @@
 package com.example.customcalendar
 
 import android.graphics.drawable.Drawable
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.DimenRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -17,7 +19,9 @@ import java.util.Date
 class CalendarAdapter(val itemOnClickListener: ItemOnClickListener ,
                       val itemClickable : Boolean = false,
                       private val dateToDrawableMap: HashMap<String, Drawable>,
-                      private val isEdit : Boolean = false) : ListAdapter<CalendarDay, CalendarAdapter.ViewHolder>(CalendarDayDiffCallback()) {
+                      private val isEdit : Boolean = false, private val itemTextSize: Int,
+                      private val itemSize:Int,
+                      private val itemPadding:Int) : ListAdapter<CalendarDay, CalendarAdapter.ViewHolder>(CalendarDayDiffCallback()) {
 
     interface ItemOnClickListener {
         fun itemOnClick(calendarDay: CalendarDay)
@@ -39,6 +43,16 @@ class CalendarAdapter(val itemOnClickListener: ItemOnClickListener ,
         private val isCheck : ImageView = itemView.findViewById(R.id.ivCheck)
 
         fun bind(calendarDay: CalendarDay) {
+            val layoutParams = dayTextView.layoutParams
+            layoutParams.width = itemView.context.resources.getDimensionPixelSize(itemSize)
+            layoutParams.height = itemView.context.resources.getDimensionPixelSize(itemSize)
+            dayTextView.layoutParams = layoutParams
+
+            val paddingInPixels = itemView.context.resources.getDimensionPixelSize(itemPadding)
+            dayTextView.setPadding(paddingInPixels, paddingInPixels, paddingInPixels, paddingInPixels)
+
+            dayTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,itemTextSize.toFloat())
+
             val dayNumberText = calendarDay.dayNumber.toString()
             dayTextView.text = dayNumberText
             if (isEdit){

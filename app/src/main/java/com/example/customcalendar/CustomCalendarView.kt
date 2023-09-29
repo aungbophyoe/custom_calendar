@@ -3,6 +3,9 @@ package com.example.customcalendar
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.util.Log
+import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -11,6 +14,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.customcalendar.databinding.MyCustomCalendarBinding
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,62 +23,104 @@ class CustomCalendarView(context: Context, attrs: AttributeSet) : RelativeLayout
 
     private val calendarData: MutableList<CalendarDay> = mutableListOf()
     private lateinit var calendarAdapter: CalendarAdapter
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var prevButton: ImageView
-    private lateinit var nextButton: ImageView
-    private lateinit var tvMonthYear : TextView
     private val calendar = Calendar.getInstance()
     private val periodDrawable = ContextCompat.getDrawable(context,R.drawable.default_background_cell)
     private val ovulationDrawable = ContextCompat.getDrawable(context,R.drawable.ovulation_cell)
     private val fertileDrawable = ContextCompat.getDrawable(context,R.drawable.fertile_cell)
+    private lateinit var binding: MyCustomCalendarBinding
 
     init {
-        inflate(context, R.layout.my_custom_calendar, this)
-        val attributes = context.obtainStyledAttributes(attrs, R.styleable.CustomCalendarView)
-        val isShowNavigation = attributes.getBoolean(R.styleable.CustomCalendarView_show_navigation, false)
-        val isItemClickable = attributes.getBoolean(R.styleable.CustomCalendarView_item_clickable, false)
-        val isEdit = attributes.getBoolean(R.styleable.CustomCalendarView_is_edit, false)
-        recyclerView = findViewById(R.id.calendarRecyclerView)
-        prevButton = findViewById(R.id.prevMonthButton)
-        nextButton = findViewById(R.id.nextMonthButton)
-        tvMonthYear = findViewById(R.id.tv_month_year)
+        binding = MyCustomCalendarBinding.inflate(LayoutInflater.from(context), this, true)
+        binding.apply {
+            val attributes = context.obtainStyledAttributes(attrs, R.styleable.CustomCalendarView)
+            val isShowNavigation = attributes.getBoolean(R.styleable.CustomCalendarView_show_navigation, false)
+            val isItemClickable = attributes.getBoolean(R.styleable.CustomCalendarView_item_clickable, false)
+            val isEdit = attributes.getBoolean(R.styleable.CustomCalendarView_is_edit, false)
+            val titleStyle = attributes.getResourceId(R.styleable.CustomCalendarView_title_style, com.google.android.material.R.style.TextAppearance_Material3_TitleSmall)
+            val titleTextSize = attributes.getDimensionPixelSize(R.styleable.CustomCalendarView_title_text_size,24)
 
-        if(isShowNavigation.not()){
-            prevButton.visibility = View.GONE
-            nextButton.visibility = View.GONE
-        }
-        val dataHashMap = hashMapOf<String,Drawable>()
-        val periodsDay = arrayListOf<String>("07-09-2023","08-09-2023","09-09-2023")
-        val ovulationDay = "17-09-2023"
-        val fertileDays =  arrayListOf<String>("10-09-2023","11-09-2023","12-09-2023","13-09-2023","14-09-2023","15-09-2023","16-09-2023","18-09-2023","19-09-2023","20-09-2023")
-        periodsDay.forEach {
-            dataHashMap[it] = periodDrawable!!
-        }
-        dataHashMap[ovulationDay] = ovulationDrawable!!
-        fertileDays.forEach {
-            dataHashMap[it] = fertileDrawable!!
-        }
+            // for day item
+            val itemTextSize = attributes.getDimensionPixelSize(R.styleable.CustomCalendarView_item_text_size, 36)
+            val itemSize = attributes.getResourceId(R.styleable.CustomCalendarView_item_size, R.dimen.default_item_size)
+            val itemPadding = attributes.getResourceId(R.styleable.CustomCalendarView_item_padding, R.dimen.default_item_padding)
+            val itemTextStyle = attributes.getResourceId(R.styleable.CustomCalendarView_item_text_style, com.google.android.material.R.style.TextAppearance_Material3_BodyMedium)
 
-        // Set up RecyclerView with your CalendarAdapter
-        calendarAdapter = CalendarAdapter(this,isItemClickable,dataHashMap,isEdit)
-        recyclerView.layoutManager = GridLayoutManager(context, 7)
-        recyclerView.adapter = calendarAdapter
+            val initialMonthYear = attributes.getString(R.styleable.CustomCalendarView_initial_month)
 
-        // Handle backward and forward button clicks
-        prevButton.setOnClickListener {
-            // Implement logic to navigate to the previous month
-            updateCalendarData(-1)
-            calendarAdapter.notifyDataSetChanged()
+            if(isShowNavigation.not()){
+                prevMonthButton.visibility = View.GONE
+                nextMonthButton.visibility = View.GONE
+            }
+            tvDayOfWeek0.setTextAppearance(titleStyle)
+            tvDayOfWeek1.setTextAppearance(titleStyle)
+            tvDayOfWeek2.setTextAppearance(titleStyle)
+            tvDayOfWeek3.setTextAppearance(titleStyle)
+            tvDayOfWeek4.setTextAppearance(titleStyle)
+            tvDayOfWeek5.setTextAppearance(titleStyle)
+            tvDayOfWeek6.setTextAppearance(titleStyle)
+
+            tvDayOfWeek0.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleTextSize.toFloat())
+            tvDayOfWeek1.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleTextSize.toFloat())
+            tvDayOfWeek2.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleTextSize.toFloat())
+            tvDayOfWeek3.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleTextSize.toFloat())
+            tvDayOfWeek4.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleTextSize.toFloat())
+            tvDayOfWeek5.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleTextSize.toFloat())
+            tvDayOfWeek6.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleTextSize.toFloat())
+
+            tvMonthYear.setTextAppearance(titleStyle)
+
+            val dataHashMap = hashMapOf<String,Drawable>()
+            val periodsDay = arrayListOf<String>("07-09-2023","08-09-2023","09-09-2023")
+            val ovulationDay = "17-09-2023"
+            val fertileDays =  arrayListOf<String>("10-09-2023","11-09-2023","12-09-2023","13-09-2023","14-09-2023","15-09-2023","16-09-2023","18-09-2023","19-09-2023","20-09-2023")
+            periodsDay.forEach {
+                dataHashMap[it] = periodDrawable!!
+            }
+            dataHashMap[ovulationDay] = ovulationDrawable!!
+            fertileDays.forEach {
+                dataHashMap[it] = fertileDrawable!!
+            }
+            Log.d("item - ","$titleTextSize , $itemTextSize , $itemSize , $itemPadding , $itemTextStyle")
+            // Set up RecyclerView with your CalendarAdapter
+            calendarAdapter = CalendarAdapter(this@CustomCalendarView,isItemClickable,dataHashMap,
+                isEdit,itemTextSize,itemSize,itemPadding)
+            calendarRecyclerView.layoutManager = GridLayoutManager(context, 7)
+            calendarRecyclerView.adapter = calendarAdapter
+
+            // Handle backward and forward button clicks
+            prevMonthButton.setOnClickListener {
+                // Implement logic to navigate to the previous month
+                updateCalendarData(-1)
+                calendarAdapter.notifyDataSetChanged()
+            }
+
+            nextMonthButton.setOnClickListener {
+                // Implement logic to navigate to the next month
+                updateCalendarData(1)
+                calendarAdapter.notifyDataSetChanged()
+            }
+
+            // Initialize calendar data for the current month
+            /*updateCalendarData(0)*/
+            setInitialMonthFromAttribute(initialMonthYear)
         }
+        /*inflate(context, R.layout.my_custom_calendar, this)*/
+    }
 
-        nextButton.setOnClickListener {
-            // Implement logic to navigate to the next month
-            updateCalendarData(1)
-            calendarAdapter.notifyDataSetChanged()
+    fun setInitialMonthFromAttribute(monthYearAttribute: String?) {
+        val dateFormat = SimpleDateFormat("M-yyyy", Locale.ENGLISH)
+        try {
+            val date = if (!monthYearAttribute.isNullOrEmpty()) {
+                dateFormat.parse(monthYearAttribute)
+            } else {
+                Date() // If the attribute is not specified, set it to the current date
+            }
+            calendar.time = date
+            updateCalendarData(0) // Update the calendar data for the specified month and year
+        } catch (e: ParseException) {
+            // Handle parsing error if the attribute string is not in the expected format
+            e.printStackTrace()
         }
-
-        // Initialize calendar data for the current month
-        updateCalendarData(0)
     }
 
     // Method to update calendar data based on the month offset (0 for current month)
@@ -90,7 +137,7 @@ class CustomCalendarView(context: Context, attrs: AttributeSet) : RelativeLayout
         val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
 
         val monthName = SimpleDateFormat("MMMM", Locale.getDefault()).format(calendar.time)
-        tvMonthYear.text = "$monthName $year"
+        binding.tvMonthYear.text = "$monthName $year"
 
         // Calculate the number of days to display from the previous month
         val firstDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)

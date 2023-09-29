@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".EditCalendarActivity"
             android:parentActivityName=".CustomCalendarActivity"/>
+        <activity android:name=".MainActivity"/>
     </application>
 
 </manifest>

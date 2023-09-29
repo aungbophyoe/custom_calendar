@@ -5,7 +5,10 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     android:id="@+id/layoutDay"
-    android:layout_margin="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginStart="2dp"
+    android:layout_marginEnd="2dp"
     android:background="?attr/actionBarItemBackground"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -13,10 +16,10 @@
     <TextView
         android:layout_width="36dp"
         android:layout_height="36dp"
-        style="@style/TextAppearance.Material3.BodyMedium"
         tools:text="24"
         android:id="@+id/tvDay"
         android:padding="8dp"
+        android:textSize="14sp"
         android:gravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -10,10 +10,17 @@ class CustomCalendarActivity  : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_custom_calendar)
         val nextButton = findViewById<Button>(R.id.nextButton)
+        val listButton = findViewById<Button>(R.id.listButton)
         nextButton.setOnClickListener {
             Intent(this, EditCalendarActivity::class.java).apply {
                 startActivity(this)
             }
         }
+        listButton.setOnClickListener {
+            Intent(this, MainActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
+
     }
 }

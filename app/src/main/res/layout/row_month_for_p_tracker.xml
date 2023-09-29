@@ -23,12 +23,22 @@
             android:paddingTop="4dp"
             android:paddingEnd="4dp"
             android:paddingBottom="4dp">
-            <FrameLayout
+            <com.example.customcalendar.CustomCalendarView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/calendarView"
-                android:layout_width="170dp"
-                android:layout_height="200dp"
+                app:show_navigation="false"
+                app:item_clickable="false"
+                app:title_style="@style/TextAppearance.Material3.LabelSmall"
+                app:title_text_size="9sp"
+                app:item_padding="@dimen/item_padding"
+                app:item_size="@dimen/item_size"
+                app:item_text_size="@dimen/item_text_size"
+                app:item_text_style="@style/TextAppearance.Material3.LabelSmall"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>
