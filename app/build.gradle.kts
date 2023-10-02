@@ -55,4 +55,8 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.hannesdorfmann:adapterdelegates4-kotlin-dsl:4.3.2")
     implementation("com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.2")
+
+    // viewmodel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
 }

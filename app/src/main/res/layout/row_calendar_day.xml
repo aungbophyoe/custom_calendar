@@ -14,6 +14,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Today"
+        android:textSize="6sp"
+        android:textStyle="bold"
+        android:id="@+id/tvToday"
+        android:visibility="invisible"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
         android:layout_width="36dp"
         android:layout_height="36dp"
         tools:text="24"
@@ -21,9 +34,23 @@
         android:padding="8dp"
         android:textSize="14sp"
         android:gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/current_day_cell"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/tvToday"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="12"
+        android:textSize="8sp"
+        android:visibility="gone"
+        android:id="@+id/tvCycleCount"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/tvDay"
+        app:layout_constraintTop_toTopOf="@id/tvDay"
+        />
 
     <ImageView
         android:layout_width="wrap_content"

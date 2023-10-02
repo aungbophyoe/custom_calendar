@@ -19,7 +19,9 @@ import java.util.Date
 class CalendarAdapter(val itemOnClickListener: ItemOnClickListener ,
                       val itemClickable : Boolean = false,
                       private val dateToDrawableMap: HashMap<String, Drawable>,
-                      private val isEdit : Boolean = false, private val itemTextSize: Int,
+                      private val isEdit : Boolean = false,
+                      private val isShowCycleCount : Boolean,
+                      private val itemTextSize: Int,
                       private val itemSize:Int,
                       private val itemPadding:Int) : ListAdapter<CalendarDay, CalendarAdapter.ViewHolder>(CalendarDayDiffCallback()) {
 
@@ -41,6 +43,8 @@ class CalendarAdapter(val itemOnClickListener: ItemOnClickListener ,
         private val dayTextView: TextView = itemView.findViewById(R.id.tvDay)
         private val layoutDay: ConstraintLayout = itemView.findViewById(R.id.layoutDay)
         private val isCheck : ImageView = itemView.findViewById(R.id.ivCheck)
+        private val tvToday : TextView = itemView.findViewById(R.id.tvToday)
+        private val tvCycleCount : TextView = itemView.findViewById(R.id.tvCycleCount)
 
         fun bind(calendarDay: CalendarDay) {
             val layoutParams = dayTextView.layoutParams
@@ -55,6 +59,7 @@ class CalendarAdapter(val itemOnClickListener: ItemOnClickListener ,
 
             val dayNumberText = calendarDay.dayNumber.toString()
             dayTextView.text = dayNumberText
+            tvToday.visibility = View.GONE
             if (isEdit){
                 isCheck.visibility = View.VISIBLE
                 dayTextView.background = null
@@ -66,6 +71,7 @@ class CalendarAdapter(val itemOnClickListener: ItemOnClickListener ,
                 if(calendarDay.isToday){
                     dayTextView.background = ContextCompat.getDrawable(itemView.context,R.drawable.current_day_cell)
                     dayTextView.setTextColor(ContextCompat.getColor(itemView.context,R.color.green))
+                    tvToday.visibility = View.VISIBLE
                 }
                 if (calendarDay.isChecked){
                     isCheck.background = ContextCompat.getDrawable(itemView.context,R.drawable.iv_check_circle)
@@ -73,6 +79,10 @@ class CalendarAdapter(val itemOnClickListener: ItemOnClickListener ,
                     isCheck.background = ContextCompat.getDrawable(itemView.context,R.drawable.iv_circle_outline)
                 }
             } else {
+                if(isShowCycleCount){
+                    tvCycleCount.text = "$position"
+                   tvCycleCount.visibility = View.VISIBLE
+                }
                 isCheck.visibility = View.GONE
                 if(calendarDay.isSelected){
                     dayTextView.background = ContextCompat.getDrawable(itemView.context,R.drawable.click_day_cell)
@@ -87,6 +97,7 @@ class CalendarAdapter(val itemOnClickListener: ItemOnClickListener ,
                     if(calendarDay.isToday){
                         dayTextView.background = ContextCompat.getDrawable(itemView.context,R.drawable.current_day_cell)
                         dayTextView.setTextColor(ContextCompat.getColor(itemView.context,R.color.green))
+                        tvToday.visibility = View.VISIBLE
                     }
 
                     val drawable = dateToDrawableMap[calendarDay.date]

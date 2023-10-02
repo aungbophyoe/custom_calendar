@@ -31,5 +31,6 @@
         <attr name="item_padding" format="reference"/>
         <attr name="item_text_style" format="reference"/>
         <attr name="initial_month" format="string" />
+        <attr name="show_cycle_count" format="boolean"/>
     </declare-styleable>
 </resources>
