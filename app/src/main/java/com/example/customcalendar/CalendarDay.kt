@@ -4,7 +4,7 @@ import java.util.Date
 
 data class CalendarDay(
     val dayNumber: Int,
-    val date: String?,
+    val date: String,
     val dayType: DayType,
     val isToday : Boolean = false,
     var isSelected : Boolean = false,

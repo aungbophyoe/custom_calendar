@@ -230,8 +230,7 @@ public class WheelView extends ScrollView {
             }
             if (position == i) {
                 itemView.setTextColor(ContextCompat.getColor(context,R.color.black));
-                /*itemView.setBackground(ContextCompat.getDrawable(context,R.drawable.selected_background_grey));*/
-                itemView.setBackgroundColor(ContextCompat.getColor(context,R.color.grey_light));
+                itemView.setBackground(ContextCompat.getDrawable(context,R.drawable.selected_background_grey));
             } else {
                 itemView.setTextColor(Color.parseColor("#bbbbbb"));
                 itemView.setBackgroundColor(ContextCompat.getColor(context,R.color.white));

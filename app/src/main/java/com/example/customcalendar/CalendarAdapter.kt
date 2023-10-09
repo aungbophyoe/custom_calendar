@@ -135,7 +135,7 @@ class CalendarAdapter(val itemOnClickListener: ItemOnClickListener ,
 
 class CalendarDayDiffCallback : DiffUtil.ItemCallback<CalendarDay>() {
     override fun areItemsTheSame(oldItem: CalendarDay, newItem: CalendarDay): Boolean {
-        return oldItem.dayNumber == newItem.dayNumber
+        return oldItem.date == newItem.date
     }
 
     override fun areContentsTheSame(oldItem: CalendarDay, newItem: CalendarDay): Boolean {

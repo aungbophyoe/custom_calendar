@@ -167,9 +167,18 @@ class CustomCalendarView(context: Context, attrs: AttributeSet) : RelativeLayout
         val daysFromPreviousMonth = (firstDayOfWeek - Calendar.SUNDAY) % 7
 
         // Fill in the calendarData with day numbers and types
-        for (i in 1..daysFromPreviousMonth) {
+        /*for (i in 1..daysFromPreviousMonth) {
             val day = calendar.getActualMaximum(Calendar.DAY_OF_MONTH) - (daysFromPreviousMonth - i)
             calendarData.add(CalendarDay(day, null,DayType.PREVIOUS_MONTH))
+        }*/
+        val previousMonthCalendar = calendar.clone() as Calendar // Create a clone for the previous month
+        previousMonthCalendar.add(Calendar.MONTH, -1) // Move to the previous month
+
+        for (i in 1..daysFromPreviousMonth) {
+            val day = previousMonthCalendar.getActualMaximum(Calendar.DAY_OF_MONTH) - (daysFromPreviousMonth - i)
+            val month = previousMonthCalendar.get(Calendar.MONTH)
+            val year = previousMonthCalendar.get(Calendar.YEAR)
+            calendarData.add(CalendarDay(day, "$day-${month + 1}-$year", DayType.PREVIOUS_MONTH))
         }
 
         val currentCalendar = Calendar.getInstance()
@@ -177,12 +186,12 @@ class CustomCalendarView(context: Context, attrs: AttributeSet) : RelativeLayout
         val currentMonth = currentCalendar.get(Calendar.MONTH)
         val currentYear = currentCalendar.get(Calendar.YEAR)
 
+        val selectedCalendar = calendar.clone() as Calendar
+        selectedCalendar.set(Calendar.YEAR, year)
+        selectedCalendar.set(Calendar.MONTH, month)
         for (dayOfMonth in 1..daysInMonth) {
-            val calendar = Calendar.getInstance()
-            calendar.set(Calendar.YEAR, year)
-            calendar.set(Calendar.MONTH, month)
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            val date = calendar.time
+            selectedCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            val date = selectedCalendar.time
             // Format the Date object to the "dd-MM-yyyy" format
             val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
             val formattedDate = dateFormat.format(date)
@@ -190,9 +199,19 @@ class CustomCalendarView(context: Context, attrs: AttributeSet) : RelativeLayout
         }
 
         // Calculate the number of days to display from the next month
-        val daysRemaining = 42 - daysFromPreviousMonth - daysInMonth
+        /*val daysRemaining = 42 - daysFromPreviousMonth - daysInMonth
         for (i in 1..daysRemaining) {
             calendarData.add(CalendarDay(i,null, DayType.NEXT_MONTH))
+        }*/
+        val nextMonthCalendar = calendar.clone() as Calendar // Create a clone for the next month
+        nextMonthCalendar.add(Calendar.MONTH, 1) // Move to the next month
+
+        val daysRemaining = 42 - daysFromPreviousMonth - daysInMonth
+        for (i in 1..daysRemaining) {
+            val day = i
+            val month = nextMonthCalendar.get(Calendar.MONTH)
+            val year = nextMonthCalendar.get(Calendar.YEAR)
+            calendarData.add(CalendarDay(day, "$day-${month + 1}-$year", DayType.NEXT_MONTH))
         }
 
         // Notify the adapter that the data has changed
