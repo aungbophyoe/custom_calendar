@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.customcalendar.databinding.RowCalendarDayBinding
 import java.util.Date
 
 
@@ -30,8 +31,8 @@ class CalendarAdapter(val itemOnClickListener: ItemOnClickListener ,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.row_calendar_day, parent, false)
-        return ViewHolder(view)
+        val binding = RowCalendarDayBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -39,7 +40,7 @@ class CalendarAdapter(val itemOnClickListener: ItemOnClickListener ,
         holder.bind(calendarDay)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(private val binding: RowCalendarDayBinding) : RecyclerView.ViewHolder(binding.root) {
         private val dayTextView: TextView = itemView.findViewById(R.id.tvDay)
         private val layoutDay: ConstraintLayout = itemView.findViewById(R.id.layoutDay)
         private val isCheck : ImageView = itemView.findViewById(R.id.ivCheck)
@@ -57,7 +58,10 @@ class CalendarAdapter(val itemOnClickListener: ItemOnClickListener ,
 
             dayTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,itemTextSize.toFloat())
 
-            val dayNumberText = calendarDay.dayNumber.toString()
+            binding.attribute = CustomAttribute(isEdit,isShowCycleCount,dateToDrawableMap)
+            binding.calendarDay = calendarDay
+
+           /* val dayNumberText = calendarDay.dayNumber.toString()
             dayTextView.text = dayNumberText
             tvToday.visibility = View.GONE
             if (isEdit){
@@ -106,7 +110,7 @@ class CalendarAdapter(val itemOnClickListener: ItemOnClickListener ,
                         dayTextView.setTextColor(ContextCompat.getColor(itemView.context,R.color.white))
                     }
                 }
-            }
+            }*/
 
             if(itemClickable){
                 itemView.setOnClickListener {
